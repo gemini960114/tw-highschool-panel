@@ -5,6 +5,7 @@
 ## 未發布
 
 - 加入 Zenodo DOI（Concept DOI `10.5281/zenodo.23293536`）至 README 與 CITATION.cff
+- 改碼對照表 23 組完成人工核對；README 說明學校合併不串連，並以 104 學年度協和祐德高中為例
 
 ## 2026.10.1（2026-10-11）
 
