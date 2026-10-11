@@ -1,0 +1,40 @@
+# 資料處理規則：build.py 只從這裡讀取規則。
+
+normalize:
+  # 113 學年度起官方代碼加上前導零（10301 → 010301；8 → 08）
+  school_code_width: 6
+  county_code_width: 2
+  county_name_map: {桃園縣: 桃園市, 台北市: 臺北市, 台中市: 臺中市, 台南市: 臺南市, 台東縣: 臺東縣}
+  # 2010 年縣市合併後，原縣、原市的舊代碼仍保留在資料中（僅供 validate.py 核對）
+  county_codes_merged_2010: {臺中市: ["06", "19"], 臺南市: ["11", "21"], 高雄市: ["12", "50"]}
+
+school_linkage:
+  # 國立高中改隸直轄市時校碼改變（如 190302 → 193302）；school_id = 該校最早出現的校碼
+  name_prefix_strip: "^(國立|市立|縣立|私立)"
+  expected_links: 23
+
+sector:
+  # 由校碼第 3 碼推導；已用名錄的官方「公/私立」欄位驗證（validate.py）
+  map: {"0": public_national, "1": private, "3": public_local, "4": public_local, "C": correctional}
+  other: unknown
+
+flags:
+  continuing_school: "進修|進校"
+  special_education_school: "啟明|啟聰|啟智|特殊學校|特殊教育"
+
+program:
+  junior_high_level_code: J        # 附設國中部；不屬於高級中等教育，彙整高中學生數時排除
+  level_columns:
+    A: students_general            # 普通科
+    B: students_vocational         # 專業群科
+    O: students_comprehensive      # 綜合高中
+    U: students_practical_skills   # 實用技能學程
+    C: students_continuing_dept    # 進修部
+
+address:
+  township_suffixes: "鄉鎮市區"
+  # 鄉鎮升格為縣轄市後統一使用現行名稱
+  township_name_map: {員林鎮: 員林市, 頭份鎮: 頭份市}
+  # 地址開頭的縣市必須是現行 22 縣市之一；否則視為省略縣名（如「屏東市民生東路…」）
+  counties: [臺北市, 新北市, 桃園市, 臺中市, 臺南市, 高雄市, 基隆市, 新竹市, 嘉義市, 新竹縣, 苗栗縣, 彰化縣,
+             南投縣, 雲林縣, 嘉義縣, 屏東縣, 宜蘭縣, 花蓮縣, 臺東縣, 澎湖縣, 金門縣, 連江縣]

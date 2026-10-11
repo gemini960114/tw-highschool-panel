@@ -1,0 +1,4 @@
+# 資料檔保持原始位元組，避免換行轉換導致 SHA-256 不符
+*.csv -text
+*.json -text
+data/** -text

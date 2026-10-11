@@ -1,0 +1,138 @@
+# 欄位定義：build.py 依此決定輸出欄位與順序；docs.py 依此產生 docs/codebook.md 與 datapackage.json。
+# type 採 Frictionless Table Schema：string / integer / boolean。
+
+tables:
+
+  hs_school_year:
+    title: 高級中等學校校×學年度面板
+    description: >-
+      每列為一所學校在一個學年度的師資、班級與學生統計（103–114 學年度，統計基準日為每學年度 9 月底）。
+      人數欄位直接取自教育部「高級中等學校校別資料」；學程結構欄位由「科別資料」彙整；鄉鎮市區取自學校名錄地址。
+    primary_key: [academic_year, school_id]
+    fields:
+      - {name: academic_year, type: integer, description: 學年度（民國）。}
+      - {name: school_id, type: string, description: 跨年學校識別碼。等於該校最早出現的校碼；改碼學校（見 school_id_crosswalk）共用同一個 school_id。跨年追蹤學校請用此欄。}
+      - {name: school_code, type: string, description: 該學年度的教育部學校代碼，已補零為 6 碼。}
+      - {name: school_name, type: string, description: 該學年度的學校名稱。}
+      - {name: county_code, type: string, description: 縣市代碼（補零為 2 碼）。注意臺中市、臺南市、高雄市因 2010 年縣市合併各有兩組代碼；以縣市分組時請用 county_name。}
+      - {name: county_name, type: string, description: 縣市名稱（現行 22 縣市；103 學年度的「桃園縣」已統一為「桃園市」）。}
+      - {name: township, type: string, description: 鄉鎮市區，由學校名錄地址解析。名錄未收錄時取同一 school_id 最接近學年度的名錄。}
+      - {name: postal_code, type: string, description: 郵遞區號，取自學校名錄地址。}
+      - {name: location_source_year, type: integer, description: township／postal_code 取自哪一個學年度的名錄；與 academic_year 相同表示同年度資料。空白表示名錄未收錄。}
+      - {name: sector_code_digit, type: string, description: 校碼第 3 碼（推導 sector 的依據）。}
+      - {name: sector, type: string, description: "設立別，由校碼第 3 碼推導：public_national（國立）、public_local（直轄市及縣市立）、private（私立）、correctional（矯正學校）。已與名錄官方公私立欄位核對（見資料品質報告）。"}
+      - {name: sector_official, type: string, description: 同學年度學校名錄的官方「公立／私立」欄位；105 學年度起才有，名錄未收錄的學校為空白。}
+      - {name: continuing_school, type: boolean, description: 校名含「進修」或「進校」（進修學校、附設進修部學校、進校分校）。}
+      - {name: special_education_school, type: boolean, description: 校名含「啟明」「啟聰」「啟智」「特殊學校」「特殊教育」。}
+      - {name: no_enrolled_students, type: boolean, description: 學生總數為 0（多為停招或退場中的學校）。}
+      - {name: ft_teacher_m, type: integer, description: 專任教師數（男）。}
+      - {name: ft_teacher_f, type: integer, description: 專任教師數（女）。}
+      - {name: pt_teacher_m, type: integer, description: 兼任教師數（男）。}
+      - {name: pt_teacher_f, type: integer, description: 兼任教師數（女）。}
+      - {name: staff_m, type: integer, description: 職員數（男）。}
+      - {name: staff_f, type: integer, description: 職員數（女）。}
+      - {name: classes, type: integer, description: 班級數（不含附設國中部）。}
+      - {name: student_m, type: integer, description: 學生數（男；含延修生，不含附設國中部）。}
+      - {name: student_f, type: integer, description: 學生數（女；含延修生，不含附設國中部）。}
+      - {name: prev_grad_m, type: integer, description: 上學年度畢業生數（男）。注意：屬於前一學年度。}
+      - {name: prev_grad_f, type: integer, description: 上學年度畢業生數（女）。注意：屬於前一學年度。}
+      - {name: student_total, type: integer, description: student_m + student_f。}
+      - {name: ft_teacher_total, type: integer, description: ft_teacher_m + ft_teacher_f。}
+      - {name: pt_teacher_total, type: integer, description: pt_teacher_m + pt_teacher_f。}
+      - {name: staff_total, type: integer, description: staff_m + staff_f。}
+      - {name: prev_grad_total, type: integer, description: prev_grad_m + prev_grad_f。}
+      - {name: students_general, type: integer, description: 普通科學生數（科別資料等級別 A）。}
+      - {name: students_vocational, type: integer, description: 專業群科學生數（等級別 B）。}
+      - {name: students_comprehensive, type: integer, description: 綜合高中學生數（等級別 O）。}
+      - {name: students_practical_skills, type: integer, description: 實用技能學程學生數（等級別 U）。}
+      - {name: students_continuing_dept, type: integer, description: 進修部學生數（等級別 C）。}
+      - {name: students_night, type: integer, description: 夜間部學生數（日夜別 N，不含附設國中部）。}
+      - {name: students_grade1, type: integer, description: 一年級學生數（不含附設國中部），可視為當學年度新生規模。}
+      - {name: students_extended, type: integer, description: 延修生數。}
+      - {name: students_junior_high_dept, type: integer, description: 附設國中部學生數（等級別 J；不計入 student_total）。}
+      - {name: classes_junior_high_dept, type: integer, description: 附設國中部班級數（不計入 classes）。}
+      - {name: n_departments, type: integer, description: 科別數（不含附設國中部）。}
+      - {name: hs_students_from_programs, type: integer, description: 由科別資料加總的學生數（不含附設國中部）；應等於 student_total，供核對。}
+      - {name: hs_classes_from_programs, type: integer, description: 由科別資料加總的班級數（不含附設國中部）；應等於 classes，供核對。}
+      - {name: school_code_raw, type: string, description: 原始檔中的學校代碼（未補零）。}
+      - {name: county_code_raw, type: string, description: 原始檔中的縣市代碼（未補零）。}
+      - {name: county_name_raw, type: string, description: 原始檔中的縣市名稱。}
+
+  hs_program_year:
+    title: 高級中等學校校×學年度×科別明細
+    description: 每列為一所學校一個學年度的一個等級別×日夜別×科別，取自教育部「高級中等學校科別資料」（103–114 學年度）。
+    primary_key: [academic_year, school_code, level_code, day_night_code, group_code, dept_code]
+    fields:
+      - {name: academic_year, type: integer, description: 學年度（民國）。}
+      - {name: school_id, type: string, description: 跨年學校識別碼（同 hs_school_year）。}
+      - {name: school_code, type: string, description: 學校代碼（補零為 6 碼）。}
+      - {name: school_name, type: string, description: 學校名稱。}
+      - {name: county_code, type: string, description: 縣市代碼（補零為 2 碼）。}
+      - {name: county_name, type: string, description: 縣市名稱。}
+      - {name: level_code, type: string, description: "等級別代碼：A 普通科、B 專業群科、C 進修部、O 綜合高中、U 實用技能學程、J 附設國中部。"}
+      - {name: level_name, type: string, description: 等級名稱。}
+      - {name: day_night_code, type: string, description: 日夜別代碼：D 日間部、N 夜間部。}
+      - {name: day_night_name, type: string, description: 日夜別名稱。}
+      - {name: group_code, type: string, description: 群別代碼。}
+      - {name: group_name, type: string, description: 群別名稱（如學術群、商業與管理群）。}
+      - {name: dept_code, type: string, description: 科系代碼。}
+      - {name: dept_name, type: string, description: 科系名稱。}
+      - {name: classes_g1, type: integer, description: 一年級班級數。}
+      - {name: classes_g2, type: integer, description: 二年級班級數。}
+      - {name: classes_g3, type: integer, description: 三年級班級數。}
+      - {name: classes_g4, type: integer, description: 四年級班級數。}
+      - {name: student_g1_m, type: integer, description: 一年級男學生數。}
+      - {name: student_g1_f, type: integer, description: 一年級女學生數。}
+      - {name: student_g2_m, type: integer, description: 二年級男學生數。}
+      - {name: student_g2_f, type: integer, description: 二年級女學生數。}
+      - {name: student_g3_m, type: integer, description: 三年級男學生數。}
+      - {name: student_g3_f, type: integer, description: 三年級女學生數。}
+      - {name: student_g4_m, type: integer, description: 四年級男學生數。}
+      - {name: student_g4_f, type: integer, description: 四年級女學生數。}
+      - {name: student_ext_m, type: integer, description: 延修生男學生數。}
+      - {name: student_ext_f, type: integer, description: 延修生女學生數。}
+      - {name: prev_grad_m, type: integer, description: 上學年度畢業生數（男）。}
+      - {name: prev_grad_f, type: integer, description: 上學年度畢業生數（女）。}
+      - {name: student_total, type: integer, description: 該列所有年級與延修生的學生數合計。}
+      - {name: classes_total, type: integer, description: 該列所有年級的班級數合計。}
+
+  hs_school_directory:
+    title: 高級中等學校名錄
+    description: 教育部「一般高級中等學校名錄」（103–115 學年度）與「大專附設高級中等進修學校名錄」合併，含地址解析出的郵遞區號與鄉鎮市區。
+    primary_key: [academic_year, directory_type, school_code]
+    fields:
+      - {name: academic_year, type: integer, description: 名錄學年度（民國）。}
+      - {name: directory_type, type: string, description: general（一般高級中等學校名錄）或 continuing（大專附設高級中等進修學校名錄）。}
+      - {name: school_id, type: string, description: 跨年學校識別碼；hs_school_year 沒有的學校（如 115 學年度新校）沿用自己的校碼。}
+      - {name: school_code, type: string, description: 學校代碼（補零為 6 碼）。}
+      - {name: school_name, type: string, description: 學校名稱。}
+      - {name: sector_official, type: string, description: 官方公立／私立欄位（105 學年度起）。}
+      - {name: county_code, type: string, description: 名錄縣市欄位中的代碼。}
+      - {name: county_name, type: string, description: 名錄縣市欄位中的名稱。}
+      - {name: postal_code, type: string, description: 地址開頭的郵遞區號。}
+      - {name: township, type: string, description: 由地址解析的鄉鎮市區。}
+      - {name: address, type: string, description: 原始地址。}
+      - {name: address_county, type: string, description: 由地址解析的縣市（供與 county_name 核對）。}
+      - {name: phone, type: string, description: 電話。}
+      - {name: url, type: string, description: 網址。}
+      - {name: note, type: string, description: 備註。}
+      - {name: source_file, type: string, description: 來源原始檔名（data/raw/）。}
+
+  school_id_crosswalk:
+    title: 改碼學校對照表
+    description: >-
+      國立高中改隸直轄市時校碼改變，依規則串連為同一 school_id：舊校碼最後出現於學年度 t−1、新校碼首次出現於 t，
+      且同縣市、校碼後 3 碼相同、校名去除「國立／市立／縣立／私立」字首後相同。另附名錄地址供核對。
+    primary_key: [old_code]
+    fields:
+      - {name: old_code, type: string, description: 舊校碼。}
+      - {name: new_code, type: string, description: 新校碼。}
+      - {name: school_id, type: string, description: 串連後的學校識別碼（最早的校碼）。}
+      - {name: old_name, type: string, description: 舊校碼最後一年的校名。}
+      - {name: new_name, type: string, description: 新校碼第一年的校名。}
+      - {name: county_name, type: string, description: 縣市。}
+      - {name: last_year_old, type: integer, description: 舊校碼最後出現的學年度。}
+      - {name: first_year_new, type: integer, description: 新校碼首次出現的學年度。}
+      - {name: address_old, type: string, description: 舊校碼最後一年在名錄中的地址。}
+      - {name: address_new, type: string, description: 新校碼第一年在名錄中的地址。}
+      - {name: address_same, type: boolean, description: 兩者地址是否完全相同（輔助驗證串連正確）。}

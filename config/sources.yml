@@ -1,0 +1,44 @@
+# 資料來源設定：acquire.py 只會下載這裡列出的檔案。
+# 所有來源皆由教育部統計處提供，授權為「政府資料開放授權條款-第1版」。
+
+snapshot_date: "2026-10-11"
+license: 政府資料開放授權條款-第1版
+license_url: https://data.gov.tw/license
+provider: 教育部統計處
+
+sources:
+  - id: school_stats
+    title: 高級中等學校校別資料(含進修部(學校))
+    page: https://data.gov.tw/dataset/6238
+    url: https://stats.moe.gov.tw/files/opendata/base0.csv
+    file: school_stats_base0.csv
+    years: "103–114"
+
+  - id: program_stats
+    title: 高級中等學校科別資料
+    page: https://data.gov.tw/dataset/9617
+    url: https://stats.moe.gov.tw/files/opendata/base2.csv
+    file: program_stats_base2.csv
+    years: "103–114"
+
+  - id: county_summary
+    title: 高級中等學校概況—按學校所在縣市別分
+    page: https://data.gov.tw/dataset/31454
+    url: https://stats.moe.gov.tw/files/opendata/edu_B_4_2.csv
+    file: county_summary_edu_B_4_2.csv
+    years: "104–114"
+    role: validation_only          # 只用來核對，不併入資料表
+
+  - id: directory
+    title: 一般高級中等學校名錄
+    page: https://data.gov.tw/dataset/6089
+    url_template: https://stats.moe.gov.tw/files/school/{year}/high.csv
+    file_template: directory_{year}.csv
+    year_list: [103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115]
+
+  - id: directory_continuing
+    title: 大專附設高級中等進修學校名錄
+    page: https://data.gov.tw/dataset/24393
+    url: https://stats.moe.gov.tw/files/school/115/highT.csv
+    file: directory_continuing_115.csv
+    years: "檔案內含多個學年度"
