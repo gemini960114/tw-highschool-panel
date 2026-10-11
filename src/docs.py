@@ -11,7 +11,7 @@ import pandas as pd
 from common import DOCS_DIR, OUT_DIR, ROOT, load_config
 
 DATASET_NAME = "tw-highschool-panel"
-VERSION = "2026.10.0"
+VERSION = "2026.10.1"
 
 
 def sha256_of(path) -> str:

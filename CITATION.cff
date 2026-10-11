@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "如果使用本資料集，請依下列格式引用，並同時標示教育部統計處原始資料（見 LICENSE-DATA.md）。"
 type: dataset
 title: "tw-highschool-panel: 臺灣高級中等學校校級面板資料（103–114 學年度）"
-version: "2026.10.0"
+version: "2026.10.1"
 date-released: "2026-10-11"
 authors:
   - family-names: "Chuang"

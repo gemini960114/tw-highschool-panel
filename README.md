@@ -2,7 +2,9 @@
 
 **tw-highschool-panel** 整合教育部統計處公開的高級中等學校校別、科別、縣市概況與學校名錄資料，建立一份**可以跨年追蹤同一所學校**的校×學年度面板，並附完整的資料處理程式與品質驗證。
 
-> 版本 2026.10.0｜原始資料快照日期 2026-10-11｜涵蓋 103–114 學年度（學校名錄至 115 學年度）
+> 版本 2026.10.1｜原始資料快照日期 2026-10-11｜涵蓋 103–114 學年度（學校名錄至 115 學年度）
+
+**English summary.** A school-by-year panel of all senior high schools in Taiwan for academic years 2014–2025 (ROC 103–114), built from open data published by the Ministry of Education. It harmonises school codes across years (including code changes when national schools were transferred to municipal governments), derives public/private status, parses township from school addresses, and aggregates programme structure (academic, vocational, comprehensive). Every processing rule and the 43 validation checks are published with the code. Data are aggregated at the school level; there is no student-level information. Tables are in UTF-8 CSV with Chinese labels; field definitions are in [docs/codebook.md](docs/codebook.md).
 
 ## 這份資料解決了什麼問題
 
@@ -55,12 +57,23 @@ panel <- read_csv("data/processed/hs_school_year.csv", col_types = cols(school_i
 
 - **學校層級的彙總資料**：沒有個別學生資料，不能用來推論學生個人的表現或行為。
 - **沒有學習成果指標**：例如升學率、會考或學測成績，都不在這份資料中。
-- **`school_id` 是依規則串連的**：規則見 codebook。23 組都以程式比對名錄地址，其中 21 組地址完全相同，1 組只有寫法不同（沙鹿高工），1 組因名錄未收錄而無法比對（臺中啟明學校）。其他形式的改制或合併（例如學校更名但校碼不變）不在串連範圍內。
+- **`school_id` 是依規則串連的**：規則見 codebook。23 組都以程式比對名錄地址，其中 21 組地址完全相同，1 組只有寫法不同（沙鹿高工），1 組因名錄未收錄而無法比對（臺中啟明學校）。其他形式的改制，例如兩校合併、一校分設，或校碼和校名同時改變且後 3 碼不同，不在串連範圍內。
 - **鄉鎮市區缺漏**：矯正學校、部分進修學校與特殊教育學校不在一般名錄中，共 130 校年沒有鄉鎮市區。
 - **名錄原始資料的小問題**：115 學年度名錄有 1 列備註欄含未加引號的換行，讀取時已接回原列，原始檔未修改。宜寧高中 106 學年度起的地址郵遞區號（402）和區名（西屯區）不一致，鄉鎮市區以地址文字為準。
 - **公私立校數與縣市概況不同**：校別資料每縣市比縣市概況多 0–3 校，推測縣市概況不另計分校或附設部。學生數、班級數、教師數則完全一致。
 - **統計口徑**：學生數含延修生、不含附設國中部；教師數分專任與兼任，縣市概況的「教師數」等於專任教師數。
 - **地址為名錄當年資料**：學校遷址會反映在不同學年度的名錄中。
+
+## 適合與不適合的用途
+
+**適合**：學校規模與師資配置的分布和趨勢、少子化下的學校規模變化、公私立或縣市之間的比較、學程結構（普通、技職、綜合）的變遷、鄉鎮層級的學校分布。
+
+**使用時請留意**：
+
+- **師生比不等於教學品質**：它只反映人力配置，不代表教學成效或學生表現。
+- **避免生態謬誤**：縣市或鄉鎮層級的關聯，不能直接推論到個別學校；學校層級的關聯，也不能推論到個別學生。
+- **關聯不是因果**：這是觀察性的行政資料，例如「學校規模和師生比有關」不代表改變規模就會改變師生比。
+- **跨年分析請用 `school_id`**，以縣市分組請用 `county_name`；需要可比較的樣本時，可以用 `continuing_school`、`special_education_school`、`sector` 排除性質特殊的學校。
 
 ## 重現與更新
 
@@ -98,6 +111,19 @@ uv run python src/docs.py             # 產生 codebook 與 datapackage.json
 - **原始資料**（`data/raw/`）：政府資料開放授權條款—第 1 版
 - **程式碼**（`src/`、`config/`）：[MIT](LICENSE)
 
-使用時請同時標示原始資料來源與本資料集，詳見 [LICENSE-DATA.md](LICENSE-DATA.md)。引用格式見 [CITATION.cff](CITATION.cff)。
+使用時請同時標示原始資料來源與本資料集，詳見 [LICENSE-DATA.md](LICENSE-DATA.md)。
+
+**建議引用格式：**
+
+> Chuang, C.-C. (2026). *tw-highschool-panel：臺灣高級中等學校校級面板資料（103–114 學年度）* (Version 2026.10.1) [Data set]. https://github.com/gemini960114/tw-highschool-panel
+
+> 原始資料：教育部統計處（2026）。高級中等學校校別資料、科別資料、縣市概況與學校名錄。政府資料開放平臺。https://data.gov.tw/
+
+機器可讀的引用資訊見 [CITATION.cff](CITATION.cff)；GitHub 頁面右側的「Cite this repository」也可以直接產生 APA 或 BibTeX 格式。
+
+## 維護者與問題回報
+
+- 維護者：Chao-Chun Chuang（[@gemini960114](https://github.com/gemini960114)）
+- 發現資料錯誤、對處理規則有疑問，或想建議新增資料，歡迎開 [Issue](https://github.com/gemini960114/tw-highschool-panel/issues)。回報資料錯誤時，請附上學年度與學校代碼。
 
 本資料集的整理工作使用了 AI 程式助理（Claude）協助撰寫程式與文件。處理規則和驗證結果都公開在 `config/` 與 `docs/`，可以逐項核對。

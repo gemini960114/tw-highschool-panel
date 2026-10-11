@@ -1,6 +1,6 @@
 # 欄位字典（Codebook）
 
-> 由 `src/docs.py` 依 `config/schema.yml` 與實際資料自動產生，請勿手動修改。資料版本：2026.10.0
+> 由 `src/docs.py` 依 `config/schema.yml` 與實際資料自動產生，請勿手動修改。資料版本：2026.10.1
 
 所有 CSV 皆為 UTF-8（含 BOM，方便以 Excel 開啟），空白儲存格表示缺失。學年度為民國紀年。
 
