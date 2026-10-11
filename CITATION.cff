@@ -9,7 +9,15 @@ authors:
     given-names: "Chao-Chun"
     alias: "gemini960114"
     website: "https://github.com/gemini960114"
+doi: "10.5281/zenodo.23293536"
 repository-code: "https://github.com/gemini960114/tw-highschool-panel"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.23293536"
+    description: "Concept DOI（所有版本，永遠指向最新版）"
+  - type: doi
+    value: "10.5281/zenodo.23293537"
+    description: "v2026.10.1"
 license: CC-BY-4.0
 keywords:
   - Taiwan

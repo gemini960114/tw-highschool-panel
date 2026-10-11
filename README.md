@@ -1,5 +1,7 @@
 # 臺灣高級中等學校校級面板資料（103–114 學年度）
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23293536.svg)](https://doi.org/10.5281/zenodo.23293536)
+
 **tw-highschool-panel** 整合教育部統計處公開的高級中等學校校別、科別、縣市概況與學校名錄資料，建立一份**可以跨年追蹤同一所學校**的校×學年度面板，並附完整的資料處理程式與品質驗證。
 
 > 版本 2026.10.1｜原始資料快照日期 2026-10-11｜涵蓋 103–114 學年度（學校名錄至 115 學年度）
@@ -115,11 +117,11 @@ uv run python src/docs.py             # 產生 codebook 與 datapackage.json
 
 **建議引用格式：**
 
-> Chuang, C.-C. (2026). *tw-highschool-panel：臺灣高級中等學校校級面板資料（103–114 學年度）* (Version 2026.10.1) [Data set]. https://github.com/gemini960114/tw-highschool-panel
+> Chuang, C.-C. (2026). *tw-highschool-panel：臺灣高級中等學校校級面板資料（103–114 學年度）* (Version 2026.10.1) [Data set]. Zenodo. https://doi.org/10.5281/zenodo.23293536
 
 > 原始資料：教育部統計處（2026）。高級中等學校校別資料、科別資料、縣市概況與學校名錄。政府資料開放平臺。https://data.gov.tw/
 
-機器可讀的引用資訊見 [CITATION.cff](CITATION.cff)；GitHub 頁面右側的「Cite this repository」也可以直接產生 APA 或 BibTeX 格式。
+DOI `10.5281/zenodo.23293536` 永遠指向最新版本；若要引用特定版本，請到 [Zenodo 頁面](https://doi.org/10.5281/zenodo.23293536)查看各版本的 DOI（v2026.10.1 為 `10.5281/zenodo.23293537`）。機器可讀的引用資訊見 [CITATION.cff](CITATION.cff)；GitHub 頁面右側的「Cite this repository」也可以直接產生 APA 或 BibTeX 格式。
 
 ## 維護者與問題回報
 
